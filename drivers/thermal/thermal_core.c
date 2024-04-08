@@ -835,8 +835,6 @@ int thermal_zone_bind_cooling_device(struct thermal_zone_device *tz, int trip,
 	if (result)
 		goto remove_upper_file;
 
-	sprintf(dev->weight_attr_name, "cdev%d_weight", dev->id);
-
 	snprintf(dev->weight_attr_name, sizeof(dev->weight_attr_name),
 		 "cdev%d_weight", dev->id);
 	sysfs_attr_init(&dev->weight_attr.attr);

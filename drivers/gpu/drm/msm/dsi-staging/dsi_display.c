@@ -7083,17 +7083,21 @@ int dsi_display_prepare(struct dsi_display *display)
 	dsi_display_ctrl_isr_configure(display, true);
 
 	if (mode->dsi_mode_flags & DSI_MODE_FLAG_DMS) {
-		if (display->is_cont_splash_enabled) {
-			pr_err("DMS is not supposed to be set on first frame\n");
+		if (display->is_cont_splash_enabled &&
+		    display->config.panel_mode == DSI_OP_VIDEO_MODE) {
+			pr_err("DMS not supported on first frame\n");
 			rc = -EINVAL;
 			goto error;
 		}
-		/* update dsi ctrl for new mode */
-		rc = dsi_display_pre_switch(display);
-		if (rc)
-			pr_err("[%s] panel pre-prepare-res-switch failed, rc=%d\n",
+
+		if (!display->is_cont_splash_enabled) {
+			/* update dsi ctrl for new mode */
+			rc = dsi_display_pre_switch(display);
+			if (rc)
+				pr_err("[%s] panel pre-switch failed, rc=%d\n",
 					display->name, rc);
-		goto error;
+			goto error;
+		}
 	}
 
 	if (!(mode->dsi_mode_flags & DSI_MODE_FLAG_POMS) &&

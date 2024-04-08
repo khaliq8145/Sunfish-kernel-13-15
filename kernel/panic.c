@@ -28,8 +28,8 @@
 #include <linux/console.h>
 #include <linux/bug.h>
 #include <linux/ratelimit.h>
-#include <soc/qcom/minidump.h>
 #include <linux/sysfs.h>
+#include <soc/qcom/minidump.h>
 
 #define PANIC_TIMER_STEP 100
 #define PANIC_BLINK_SPD 18
