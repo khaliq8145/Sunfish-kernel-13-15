@@ -25,7 +25,6 @@
 #include <linux/of_device.h>
 #include <linux/platform_device.h>
 #include <linux/ioport.h>
-#include <linux/spinlock.h>
 #include <linux/dma-mapping.h>
 #include <linux/mmc/host.h>
 #include <linux/mmc/mmc.h>
@@ -133,7 +132,6 @@ struct meson_host {
 	struct	mmc_host	*mmc;
 	struct	mmc_command	*cmd;
 
-	spinlock_t lock;
 	void __iomem *regs;
 	struct clk *core_clk;
 	struct clk *mmc_clk;
@@ -1002,8 +1000,6 @@ static irqreturn_t meson_mmc_irq(int irq, void *dev_id)
 	if (WARN_ON(!host) || WARN_ON(!host->cmd))
 		return IRQ_NONE;
 
-	spin_lock(&host->lock);
-
 	cmd = host->cmd;
 	data = cmd->data;
 	irq_en = readl(host->regs + SD_EMMC_IRQ_EN);
@@ -1053,7 +1049,6 @@ out:
 			 "Unexpected IRQ! status=0x%08x, irq_en=0x%08x\n",
 			 raw_status, irq_en);
 
-	spin_unlock(&host->lock);
 	return ret;
 }
 
@@ -1167,8 +1162,6 @@ static int meson_mmc_probe(struct platform_device *pdev)
 	host->mmc = mmc;
 	host->dev = &pdev->dev;
 	dev_set_drvdata(&pdev->dev, host);
-
-	spin_lock_init(&host->lock);
 
 	/* Get regulators and the supported OCR mask */
 	host->vqmmc_enabled = false;
