@@ -11522,7 +11522,7 @@ static void ufshcd_init_manual_gc(struct ufs_hba *hba)
 	mgc->hrtimer.function = ufshcd_mgc_hrtimer_handler;
 
 	INIT_WORK(&mgc->hibern8_work, ufshcd_mgc_hibern8_work);
-	snprintf(wq_name, ARRAY_SIZE(wq_name), "ufs_mgc_hibern8_work_%d",
+	snprintf(wq_name, ARRAY_SIZE(wq_name), "ufs_mgc_hib_work_%d",
 			hba->host->host_no);
 	hba->manual_gc.mgc_workq = create_singlethread_workqueue(wq_name);
 }
