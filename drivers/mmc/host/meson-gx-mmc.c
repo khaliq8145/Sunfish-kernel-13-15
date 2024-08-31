@@ -1039,6 +1039,11 @@ out:
 	/* ack all enabled interrupts */
 	writel(irq_en, host->regs + SD_EMMC_STATUS);
 
+	if (ret == IRQ_NONE)
+		dev_warn(host->dev,
+			 "Unexpected IRQ! status=0x%08x, irq_en=0x%08x\n",
+			 raw_status, irq_en);
+
 	return ret;
 }
 
