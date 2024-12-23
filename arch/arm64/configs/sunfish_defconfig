@@ -47,6 +47,7 @@ CONFIG_DEFAULT_TCP_CONG="cubic"
 # Kernel Tweaks
 #
 CONFIG_ADRENO_IDLER=y
+CONFIG_ANDROID_SIMPLE_LMK=y
 
 #
 # Sunfish General Configs
